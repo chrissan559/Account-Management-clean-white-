@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Management — Kaizen Chris</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#111; --muted:#666; --line:#e5e5e5; --signal:#d93025; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Inter',sans-serif; background:#fff; color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 24px; }
+
+  header{ padding:48px 0 32px; border-bottom:1px solid var(--line); }
+  .eyebrow{ font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+  h1{ font-size:clamp(32px,5vw,48px); font-weight:700; line-height:1.1; letter-spacing:-0.02em; margin-bottom:16px; }
+  .sub{ font-size:17px; color:var(--muted); max-width:520px; }
+
+  section{ padding:40px 0; border-bottom:1px solid var(--line); }
+  h2{ font-size:22px; font-weight:700; margin-bottom:8px; }
+  .lede{ color:var(--muted); font-size:15px; margin-bottom:28px; }
+
+  /* Form */
+  .field{ margin-bottom:20px; }
+  .field label{ display:block; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em; }
+  .field input, .field textarea, .field select{
+    width:100%; background:#fff; border:1px solid var(--line); color:var(--ink);
+    font-family:'Inter',sans-serif; font-size:15px; padding:12px 14px; border-radius:6px; outline:none; transition:border-color 0.15s;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{ border-color:var(--ink); }
+  .field textarea{ resize:vertical; min-height:100px; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:560px){ .field-row{ grid-template-columns:1fr; } }
+
+  button[type="submit"]{
+    background:var(--ink); color:#fff; font-family:'Inter',sans-serif; font-size:15px; font-weight:600;
+    padding:14px 28px; border:none; border-radius:6px; cursor:pointer; width:100%; transition:opacity 0.15s;
+  }
+  button[type="submit"]:hover{ opacity:0.85; }
+  button[type="submit"]:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  .status{ font-size:14px; margin-top:16px; padding:12px 16px; border-radius:6px; display:none; }
+  .status.ok{ background:#e8f5e9; color:#2e7d32; display:block; }
+  .status.err{ background:#ffebee; color:#c62828; display:block; }
+
+  /* Cards */
+  .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px; }
+  @media(max-width:640px){ .cards{ grid-template-columns:1fr; } }
+  .card{ border:1px solid var(--line); padding:24px; border-radius:8px; }
+  .card h3{ font-size:15px; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.02em; }
+  .card p{ font-size:14px; color:var(--muted); line-height:1.6; }
+  .card .price{ font-size:28px; font-weight:700; margin:12px 0; }
+  .card .price span{ font-size:14px; font-weight:400; color:var(--muted); }
+  .card ul{ list-style:none; margin:0; padding:0; }
+  .card li{ font-size:14px; padding:6px 0; border-top:1px solid var(--line); color:var(--muted); }
+  .card li:first-child{ border-top:none; padding-top:0; }
+  .card.featured{ border-color:var(--ink); background:#fafafa; position:relative; }
+  .card.featured::before{ content:"RECOMMENDED"; position:absolute; top:-10px; left:16px; background:var(--ink); color:#fff; font-size:10px; font-weight:600; letter-spacing:0.06em; padding:3px 10px; border-radius:4px; }
+
+  /* Steps */
+  .steps{ display:flex; gap:0; border:1px solid var(--line); border-radius:8px; overflow:hidden; flex-wrap:wrap; }
+  .step{ flex:1; min-width:140px; padding:20px; border-right:1px solid var(--line); }
+  .step:last-child{ border-right:none; background:#fafafa; }
+  @media(max-width:640px){ .step{ border-right:none; border-bottom:1px solid var(--line); } .step:last-child{ border-bottom:none; } }
+  .step .num{ font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+  .step h4{ font-size:14px; font-weight:700; margin-bottom:4px; }
+  .step p{ font-size:13px; color:var(--muted); line-height:1.5; }
+
+  footer{ padding:40px 0 60px; text-align:center; color:var(--muted); font-size:13px; }
+  .wa-link{ color:var(--ink); font-weight:600; text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:1px; }
+
+  .wa-float{
+    position:fixed; bottom:20px; right:20px; z-index:50;
+    display:flex; align-items:center; gap:8px;
+    background:#25d366; color:#fff;
+    font-family:'Inter',sans-serif; font-size:13px; font-weight:600;
+    padding:12px 18px; border-radius:999px; text-decoration:none;
+    box-shadow:0 4px 16px rgba(0,0,0,0.15);
+  }
+  .wa-float svg{ width:18px; height:18px; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Account Management Proposal</div>
+    <h1>Trade Your Capital.<br>Keep Your Peace.</h1>
+    <p class="sub">You put up the capital. I handle execution, risk, and reporting. Transparent splits, daily updates, direct line.</p>
+  </header>
+
+  <!-- PROFILE -->
+  <section>
+    <div class="eyebrow" style="margin-bottom:8px;">The Manager</div>
+    <h2 style="font-size:20px;">Kaizen Chris</h2>
+    <p class="lede">Independent trader & account manager. I run discretionary and systematic strategies with capital preservation first, then growth. Every trade, every fee, every cent — you see it all.</p>
+    <a class="wa-link" href="https://wa.me/2347031379047?text=Hi%20Kaizen_Chris%2C%20I%27m%20interested%20in%20your%20account%20management%20service." target="_blank">Message on WhatsApp — 0703 137 9047 →</a>
+  </section>
+
+  <!-- WHY -->
+  <section>
+    <div class="eyebrow" style="margin-bottom:8px;">The Edge</div>
+    <h2 style="font-size:20px;">Why hand over your account</h2>
+    <div class="cards" style="margin-top:20px;">
+      <div class="card">
+        <h3>Capital Protection</h3>
+        <p>Hard stop-loss at account level. If drawdown hits the limit, trading halts automatically.</p>
+      </div>
+      <div class="card">
+        <h3>Full Transparency</h3>
+        <p>Daily P&L snapshots. Weekly summaries. Monthly deep-dives. You always know where your money is.</p>
+      </div>
+      <div class="card">
+        <h3>No Hidden Fees</h3>
+        <p>Profit split only — no management fees, no subscriptions, no withdrawal penalties.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIERS -->
+  <section>
+    <div class="eyebrow" style="margin-bottom:8px;">Account Tiers</div>
+    <h2 style="font-size:20px;">Pick your size</h2>
+    <div class="cards" style="margin-top:20px;">
+      <div class="card">
+        <h3>Starter</h3>
+        <div class="price">$500 <span>– $4,999</span></div>
+        <ul>
+          <li>50 / 50 profit split</li>
+          <li>Daily P&L via WhatsApp</li>
+          <li>Weekly summary report</li>
+          <li>Max drawdown: 15%</li>
+          <li>Withdrawal: monthly</li>
+        </ul>
+      </div>
+      <div class="card featured">
+        <h3>Standard</h3>
+        <div class="price">$5,000 <span>– $24,999</span></div>
+        <ul>
+          <li>60 / 40 split (you keep 60%)</li>
+          <li>Daily P&L + weekly deep-dive</li>
+          <li>Priority WhatsApp support</li>
+          <li>Max drawdown: 12%</li>
+          <li>Withdrawal: bi-weekly</li>
+          <li>Monthly strategy call</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>VIP</h3>
+        <div class="price">$25,000 <span>+</span></div>
+        <ul>
+          <li>70 / 30 split (you keep 70%)</li>
+          <li>Real-time P&L dashboard</li>
+          <li>Dedicated WhatsApp line</li>
+          <li>Max drawdown: 10%</li>
+          <li>Withdrawal: weekly</li>
+          <li>Monthly strategy review</li>
+          <li>Custom risk parameters</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section id="apply">
+    <div class="eyebrow" style="margin-bottom:8px;">Get Started</div>
+    <h2 style="font-size:20px;">Apply for account management</h2>
+    <p class="lede">Fill this in. Your details are saved automatically. I'll get back to you within 24 hours.</p>
+
+    <form id="leadForm" onsubmit="handleSubmit(event)">
+      <div class="field-row">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="f-name" name="entry.1193442442" placeholder="John Doe" required>
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input type="text" id="f-loc" name="entry.1138516140" placeholder="Lagos, Nigeria" required>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>WhatsApp Number</label>
+          <input type="tel" id="f-phone" name="entry.188832498" placeholder="+234..." required>
+        </div>
+        <div class="field">
+          <label>Email (optional)</label>
+          <input type="email" id="f-email" name="entry.1258942628" placeholder="you@email.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Amount Willing to Risk ($)</label>
+        <input type="number" id="f-amt" name="entry.285384221" placeholder="5000" min="500" step="100" required>
+      </div>
+
+      <div class="field">
+        <label>Why do you want your account managed?</label>
+        <textarea id="f-reason" name="entry.285384221" placeholder="e.g. I don't have time to trade, I want passive income..." required></textarea>
+      </div>
+
+      <div class="field">
+        <label>Preferred Tier</label>
+        <select id="f-tier" name="entry.1007784680" required>
+          <option value="">Select a tier</option>
+          <option value="Starter ($500 - $4,999)">Starter ($500 - $4,999)</option>
+          <option value="Standard ($5,000 - $24,999)">Standard ($5,000 - $24,999)</option>
+          <option value="VIP ($25,000+)">VIP ($25,000+)</option>
+        </select>
+      </div>
+
+      <button type="submit" id="submitBtn">Submit Application & Open WhatsApp →</button>
+      <div class="status" id="status"></div>
+    </form>
+  </section>
+
+  <!-- PROCESS -->
+  <section style="border-bottom:none;">
+    <div class="eyebrow" style="margin-bottom:8px;">How It Works</div>
+    <h2 style="font-size:20px;">From first message to first trade</h2>
+    <div class="steps" style="margin-top:20px;">
+      <div class="step"><div class="num">01</div><h4>Intro Call</h4><p>Discuss goals, risk tolerance, and tier.</p></div>
+      <div class="step"><div class="num">02</div><h4>Agreement</h4><p>One-page terms. Signed digitally. No lock-in.</p></div>
+      <div class="step"><div class="num">03</div><h4>Funding</h4><p>You fund your account. I get trade-only access.</p></div>
+      <div class="step"><div class="num">04</div><h4>Trade & Report</h4><p>Daily updates. Profits compound. Risk managed.</p></div>
+      <div class="step"><div class="num">05</div><h4>Split & Withdraw</h4><p>Profits split at interval. Clean payout.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    Kaizen Chris — Account Management<br>
+    <a class="wa-link" href="https://wa.me/2347031379047?text=Hi%20Kazien_Chris%2C%20I%27m%20interested%20in%20your%20account%20management%20service." target="_blank">0703 137 9047</a>
+  </footer>
+</div>
+
+<a class="wa-float" href="https://wa.me/2347031379047?text=Hi%20Kazien_Chris%2C%20I%27m%20interested%20in%20your%20account%20management%20service." target="_blank" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  WhatsApp
+</a>
+
+<script>
+// === GOOGLE FORM SETUP ===
+// 1. Create a Google Form at forms.google.com
+// 2. Add these exact questions (in order):
+//    - Full Name (Short answer)
+//    - Location (Short answer)
+//    - WhatsApp Number (Short answer)
+//    - Email (optional) (Short answer)
+//    - Amount Willing to Risk (Short answer)
+//    - Why do you want your account managed? (Paragraph)
+//    - Preferred Tier (Multiple choice: Starter, Standard, VIP)
+//
+// 3. Click the 3 dots (⋮) → "Get pre-filled link"
+// 4. Fill in dummy data for each field → click "Get link"
+// 5. Copy the URL. It looks like:
+//    https://docs.google.com/forms/d/e/FORM_ID/viewform?entry.1234567890=Name&entry.0987654321=Location...
+//
+// 6. Extract the entry IDs (the numbers after "entry.") and replace below:
+const FORM_ID = '1FAIpQLSeyigtE_QT64ojdAsfoC8M2KUS6tS_Msyio0Kf2okzppVH8vA';
+const ENTRY_NAME = 'entry.1193442442';      // Replace with your actual entry ID
+const ENTRY_LOC = 'entry.1138516140';       // Replace with your actual entry ID
+const ENTRY_PHONE = 'entry.188832498';     // Replace with your actual entry ID
+const ENTRY_EMAIL = 'entry.1258942628';     // Replace with your actual entry ID
+const ENTRY_AMT = 'entry.285384221';       // Replace with your actual entry ID
+const ENTRY_REASON = 'entry.2094381017';    // Replace with your actual entry ID
+const ENTRY_TIER = 'entry.1007784680';      // Replace with your actual entry ID
+
+function handleSubmit(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const status = document.getElementById('status');
+
+  const name = document.getElementById('f-name').value.trim();
+  const loc = document.getElementById('f-loc').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const amt = document.getElementById('f-amt').value.trim();
+  const reason = document.getElementById('f-reason').value.trim();
+  const tier = document.getElementById('f-tier').value;
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  // Build WhatsApp message
+  let msg = "Hi Kaizen_Chris, I'm interested in your account management service.%0A%0A";
+  msg += "*Name:* " + name + "%0A";
+  msg += "*Location:* " + loc + "%0A";
+  msg += "*Amount:* $" + amt + "%0A";
+  msg += "*Tier:* " + tier + "%0A";
+  msg += "*Reason:* " + reason + "%0A";
+  msg += "*WhatsApp:* " + phone + "%0A";
+  if(email) msg += "*Email:* " + email + "%0A";
+
+  // Check if Google Form is configured
+  if(FORM_ID !== 'YOUR_FORM_ID_HERE'){
+    // Submit to Google Form (opens in hidden iframe)
+    const formUrl = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse?' +
+      ENTRY_NAME + '=' + encodeURIComponent(name) + '&' +
+      ENTRY_LOC + '=' + encodeURIComponent(loc) + '&' +
+      ENTRY_PHONE + '=' + encodeURIComponent(phone) + '&' +
+      ENTRY_EMAIL + '=' + encodeURIComponent(email || '') + '&' +
+      ENTRY_AMT + '=' + encodeURIComponent(amt) + '&' +
+      ENTRY_REASON + '=' + encodeURIComponent(reason) + '&' +
+      ENTRY_TIER + '=' + encodeURIComponent(tier) + '&submit=Submit';
+
+    // Use an image request to submit (avoids CORS issues)
+    const img = new Image();
+    img.src = formUrl;
+    img.onload = img.onerror = function(){
+      status.className = 'status ok';
+      status.textContent = '✓ Saved. Opening WhatsApp...';
+      setTimeout(() => {
+        window.open("https://wa.me/2347031379047?text=" + msg, "_blank");
+        btn.disabled = false;
+        btn.textContent = 'Submit Application & Open WhatsApp →';
+        status.textContent = '✓ Sent! Check your WhatsApp.';
+        document.getElementById('leadForm').reset();
+      }, 800);
+    };
+  } else {
+    // No Google Form configured yet — just WhatsApp
+    status.className = 'status ok';
+    status.textContent = 'Opening WhatsApp...';
+    setTimeout(() => {
+      window.open("https://wa.me/2347031379047?text=" + msg, "_blank");
+      btn.disabled = false;
+      btn.textContent = 'Submit Application & Open WhatsApp →';
+      status.textContent = '✓ Sent! Check your WhatsApp.';
+      document.getElementById('leadForm').reset();
+    }, 500);
+  }
+}
+</script>
+</body>
+  </html>
