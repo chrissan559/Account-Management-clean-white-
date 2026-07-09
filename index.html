@@ -176,24 +176,25 @@
       <p class="lede">Fill this in. Your details are saved automatically. I'll get back to you within 24 hours.</p>
 
       <!-- ============================================ -->
-      <!-- FORMSPREE SETUP INSTRUCTIONS:                -->
-      <!-- 1. Go to https://formspree.io                -->
-      <!-- 2. Sign up (free, no credit card)            -->
-      <!-- 3. Click "New Form"                          -->
-      <!-- 4. Copy your form endpoint URL               -->
-      <!--    It looks like: https://formspree.io/f/XXXXX -->
-      <!-- 5. Replace YOUR_FORM_ID below                -->
+      <!-- STATICFORMS SETUP INSTRUCTIONS:              -->
+      <!-- 1. Go to https://www.staticforms.xyz         -->
+      <!-- 2. Sign up with your email (free)             -->
+      <!-- 3. You'll receive an access key/token          -->
+      <!-- 4. Replace YOUR_ACCESS_KEY below              -->
       <!-- ============================================ -->
-      <form action="https://formspree.io/f/mqevrzvg" method="POST">
+      <form action="https://api.staticforms.dev/submit" method="POST">
 
-        <!-- Redirect back to your page after submission -->
-        <input type="hidden" name="_next" value="https://wa.me/2347031379047?text=Hi%20Okororie%2C%20I%20just%20submitted%20the%20application%20form%20on%20your%20website.">
+        <!-- Your StaticForms access key -->
+        <input type="hidden" name="accessKey" value="sf_49c04d9efc712539e5258915">
 
-        <!-- Subject line for the email you receive -->
-        <input type="hidden" name="_subject" value="New Account Management Lead - Okororie Christopher">
+        <!-- Subject line for email notification -->
+        <input type="hidden" name="subject" value="New Account Management Lead - Okororie Christopher">
 
-        <!-- Reply-to will be set to their email -->
-        <input type="hidden" name="_replyto" value="">
+        <!-- Reply-to field -->
+        <input type="hidden" name="replyTo" value="@">
+
+        <!-- Redirect after submission -->
+        <input type="hidden" name="redirectTo" value="https://wa.me/2347031379047?text=Hi%20Okororie%2C%20I%20just%20submitted%20the%20application%20form%20on%20your%20website.">
 
         <div class="field-row">
           <div class="field">
@@ -236,6 +237,9 @@
             <option value="VIP ($25,000+)">VIP ($25,000+)</option>
           </select>
         </div>
+
+        <!-- Honeypot spam protection -->
+        <input type="text" name="honeypot" style="display:none">
 
         <button type="submit">Submit Application →</button>
       </form>
