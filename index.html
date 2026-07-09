@@ -6,7 +6,7 @@
 <title>Account Management — Okororie Christopher</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --ink:#111; --muted:#666; --line:#e5e5e5; --signal:#d93025; }
+  :root{ --ink:#111; --muted:#666; --line:#e5e5e5; --signal:#1a73e8; }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{ font-family:'Inter',sans-serif; background:#fff; color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
@@ -38,11 +38,20 @@
     padding:14px 28px; border:none; border-radius:6px; cursor:pointer; width:100%; transition:opacity 0.15s;
   }
   button[type="submit"]:hover{ opacity:0.85; }
-  button[type="submit"]:disabled{ opacity:0.5; cursor:not-allowed; }
 
-  .status{ font-size:14px; margin-top:16px; padding:12px 16px; border-radius:6px; display:none; }
-  .status.ok{ background:#e8f5e9; color:#2e7d32; display:block; }
-  .status.err{ background:#ffebee; color:#c62828; display:block; }
+  /* Blue section */
+  #apply{ background:var(--signal); color:#fff; margin:0 -24px; padding:48px 24px; border-bottom:none; }
+  #apply .wrap{ max-width:720px; margin:0 auto; padding:0; }
+  #apply .eyebrow{ color:rgba(255,255,255,0.7); }
+  #apply h2{ color:#fff; }
+  #apply .lede{ color:rgba(255,255,255,0.85); }
+  #apply .field label{ color:#fff; }
+  #apply .field input, #apply .field textarea, #apply .field select{
+    background:#fff; color:var(--ink); border:none;
+  }
+  #apply .field input:focus, #apply .field textarea:focus, #apply .field select:focus{ box-shadow:0 0 0 2px rgba(255,255,255,0.4); }
+  #apply button[type="submit"]{ background:#fff; color:var(--signal); }
+  #apply button[type="submit"]:hover{ background:#f1f3f4; }
 
   /* Cards */
   .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px; }
@@ -90,7 +99,6 @@
     <p class="sub">You put up the capital. I handle execution, risk, and reporting. Transparent splits, daily updates, direct line.</p>
   </header>
 
-  <!-- PROFILE -->
   <section>
     <div class="eyebrow" style="margin-bottom:8px;">The Manager</div>
     <h2 style="font-size:20px;">Okororie Christopher</h2>
@@ -98,7 +106,6 @@
     <a class="wa-link" href="https://wa.me/2347031379047?text=Hi%20Okororie%2C%20I%27m%20interested%20in%20your%20account%20management%20service." target="_blank">Message on WhatsApp — 0703 137 9047 →</a>
   </section>
 
-  <!-- WHY -->
   <section>
     <div class="eyebrow" style="margin-bottom:8px;">The Edge</div>
     <h2 style="font-size:20px;">Why hand over your account</h2>
@@ -118,7 +125,6 @@
     </div>
   </section>
 
-  <!-- TIERS -->
   <section>
     <div class="eyebrow" style="margin-bottom:8px;">Account Tiers</div>
     <h2 style="font-size:20px;">Pick your size</h2>
@@ -163,62 +169,79 @@
   </section>
 
   <!-- FORM -->
-  <section id="apply" style="background:#1a73e8; color:#fff; margin:0 -24px; padding:48px 24px; border-bottom:none;">
-    <div class="wrap" style="max-width:720px; margin:0 auto; padding:0;">
-    <div class="eyebrow" style="margin-bottom:8px; color:rgba(255,255,255,0.7);">Get Started</div>
-    <h2 style="font-size:20px; color:#fff;">Apply for account management</h2>
-    <p style="color:rgba(255,255,255,0.85); font-size:15px; margin-bottom:28px;">Fill this in. Your details are saved automatically. I'll get back to you within 24 hours.</p>
+  <section id="apply">
+    <div class="wrap">
+      <div class="eyebrow" style="margin-bottom:8px;">Get Started</div>
+      <h2 style="font-size:20px;">Apply for account management</h2>
+      <p class="lede">Fill this in. Your details are saved automatically. I'll get back to you within 24 hours.</p>
 
-    <form id="leadForm" onsubmit="handleSubmit(event)">
-      <div class="field-row">
-        <div class="field">
-          <label>Full Name</label>
-          <input type="text" id="f-name" name="entry.0000000001" placeholder="John Doe" required>
+      <!-- ============================================ -->
+      <!-- FORMSPREE SETUP INSTRUCTIONS:                -->
+      <!-- 1. Go to https://formspree.io                -->
+      <!-- 2. Sign up (free, no credit card)            -->
+      <!-- 3. Click "New Form"                          -->
+      <!-- 4. Copy your form endpoint URL               -->
+      <!--    It looks like: https://formspree.io/f/XXXXX -->
+      <!-- 5. Replace YOUR_FORM_ID below                -->
+      <!-- ============================================ -->
+      <form action="https://formspree.io/f/mqevrzvg" method="POST">
+
+        <!-- Redirect back to your page after submission -->
+        <input type="hidden" name="_next" value="https://wa.me/2347031379047?text=Hi%20Okororie%2C%20I%20just%20submitted%20the%20application%20form%20on%20your%20website.">
+
+        <!-- Subject line for the email you receive -->
+        <input type="hidden" name="_subject" value="New Account Management Lead - Okororie Christopher">
+
+        <!-- Reply-to will be set to their email -->
+        <input type="hidden" name="_replyto" value="">
+
+        <div class="field-row">
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="John Doe" required>
+          </div>
+          <div class="field">
+            <label>Location</label>
+            <input type="text" name="location" placeholder="Lagos, Nigeria" required>
+          </div>
         </div>
-        <div class="field">
-          <label>Location</label>
-          <input type="text" id="f-loc" name="entry.0000000002" placeholder="Lagos, Nigeria" required>
+
+        <div class="field-row">
+          <div class="field">
+            <label>WhatsApp Number</label>
+            <input type="tel" name="phone" placeholder="+234..." required>
+          </div>
+          <div class="field">
+            <label>Email (optional)</label>
+            <input type="email" name="email" placeholder="you@email.com">
+          </div>
         </div>
-      </div>
 
-      <div class="field-row">
         <div class="field">
-          <label>WhatsApp Number</label>
-          <input type="tel" id="f-phone" name="entry.0000000003" placeholder="+234..." required>
+          <label>Amount Willing to Risk ($)</label>
+          <input type="number" name="amount" placeholder="5000" min="500" step="100" required>
         </div>
+
         <div class="field">
-          <label>Email (optional)</label>
-          <input type="email" id="f-email" name="entry.0000000004" placeholder="you@email.com">
+          <label>Why do you want your account managed?</label>
+          <textarea name="reason" rows="4" placeholder="e.g. I don't have time to trade, I want passive income..." required></textarea>
         </div>
-      </div>
 
-      <div class="field">
-        <label>Amount Willing to Risk ($)</label>
-        <input type="number" id="f-amt" name="entry.0000000005" placeholder="5000" min="500" step="100" required>
-      </div>
+        <div class="field">
+          <label>Preferred Tier</label>
+          <select name="tier" required>
+            <option value="">Select a tier</option>
+            <option value="Starter ($500 - $4,999)">Starter ($500 - $4,999)</option>
+            <option value="Standard ($5,000 - $24,999)">Standard ($5,000 - $24,999)</option>
+            <option value="VIP ($25,000+)">VIP ($25,000+)</option>
+          </select>
+        </div>
 
-      <div class="field">
-        <label>Why do you want your account managed?</label>
-        <textarea id="f-reason" name="entry.0000000006" placeholder="e.g. I don't have time to trade, I want passive income..." required></textarea>
-      </div>
-
-      <div class="field">
-        <label>Preferred Tier</label>
-        <select id="f-tier" name="entry.0000000007" required>
-          <option value="">Select a tier</option>
-          <option value="Starter ($500 - $4,999)">Starter ($500 - $4,999)</option>
-          <option value="Standard ($5,000 - $24,999)">Standard ($5,000 - $24,999)</option>
-          <option value="VIP ($25,000+)">VIP ($25,000+)</option>
-        </select>
-      </div>
-
-      <button type="submit" id="submitBtn">Submit Application & Open WhatsApp →</button>
-      <div class="status" id="status" style="background:rgba(255,255,255,0.15); color:#fff;"></div>
-    </form>
+        <button type="submit">Submit Application →</button>
+      </form>
     </div>
   </section>
 
-  <!-- PROCESS -->
   <section style="border-bottom:none;">
     <div class="eyebrow" style="margin-bottom:8px;">How It Works</div>
     <h2 style="font-size:20px;">From first message to first trade</h2>
@@ -242,132 +265,5 @@
   WhatsApp
 </a>
 
-<script>
-// === GOOGLE FORM SETUP ===
-// 1. Create a Google Form at forms.google.com
-// 2. Add these exact questions (in order):
-//    - Full Name (Short answer)
-//    - Location (Short answer)
-//    - WhatsApp Number (Short answer)
-//    - Email (optional) (Short answer)
-//    - Amount Willing to Risk ($) (Short answer)
-//    - Why do you want your account managed? (Paragraph)
-//    - Preferred Tier (Multiple choice: Starter, Standard, VIP)
-//
-// 3. Click the 3 dots (⋮) → "Get pre-filled link"
-// 4. Fill in dummy data for each field → click "Get link"
-// 5. Copy the URL. It looks like:
-//    https://docs.google.com/forms/d/e/FORM_ID/viewform?usp=pp_url&entry.1234567890=Name&entry.0987654321=Location...
-//
-// 6. Extract the FORM_ID (long string after /d/e/ and before /viewform)
-// 7. Extract the entry IDs (numbers after "entry.") and replace below IN ORDER:
-
-const FORM_ID = '1FAIpQLSeyigtE_QT64ojdAsfoC8M2KUS6tS_Msyio0Kf2okzppVH8vA';
-
-// Replace these with your ACTUAL entry IDs from the prefill URL:
-const E_NAME   = 'entry.1193442442';  // Full Name
-const E_LOC    = 'entry.1138516140';  // Location
-const E_PHONE  = 'entry.188832498';  // WhatsApp Number
-const E_EMAIL  = 'entry.1258942628';  // Email
-const E_AMT    = 'entry.285384221';  // Amount
-const E_REASON = 'entry.2094381017';  // Reason
-const E_TIER   = 'entry.1007784680';  // Preferred Tier
-
-function handleSubmit(e){
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const status = document.getElementById('status');
-
-  const name = document.getElementById('f-name').value.trim();
-  const loc = document.getElementById('f-loc').value.trim();
-  const phone = document.getElementById('f-phone').value.trim();
-  const email = document.getElementById('f-email').value.trim();
-  const amt = document.getElementById('f-amt').value.trim();
-  const reason = document.getElementById('f-reason').value.trim();
-  const tier = document.getElementById('f-tier').value;
-
-  // Build WhatsApp message
-  let msg = "Hi Okororie, I'm interested in your account management service.%0A%0A";
-  msg += "*Name:* " + name + "%0A";
-  msg += "*Location:* " + loc + "%0A";
-  msg += "*Amount:* $" + amt + "%0A";
-  msg += "*Tier:* " + tier + "%0A";
-  msg += "*Reason:* " + reason + "%0A";
-  msg += "*WhatsApp:* " + phone + "%0A";
-  if(email) msg += "*Email:* " + email + "%0A";
-
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
-
-  if(FORM_ID && FORM_ID.length > 10){
-    // === METHOD: Hidden iframe (bypasses CORS) ===
-    // Create a hidden form and submit it to Google Forms
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/formResponse';
-    form.target = 'hidden_iframe';
-    form.style.display = 'none';
-
-    const fields = {};
-    fields[E_NAME] = name;
-    fields[E_LOC] = loc;
-    fields[E_PHONE] = phone;
-    fields[E_EMAIL] = email || '';
-    fields[E_AMT] = amt;
-    fields[E_REASON] = reason;
-    fields[E_TIER] = tier;
-
-    for(const [key, val] of Object.entries(fields)){
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = val;
-      form.appendChild(input);
-    }
-
-    // Create hidden iframe to catch the submission
-    let iframe = document.getElementById('hidden_iframe');
-    if(!iframe){
-      iframe = document.createElement('iframe');
-      iframe.name = 'hidden_iframe';
-      iframe.id = 'hidden_iframe';
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-    }
-
-    // When iframe loads, submission is done
-    iframe.onload = function(){
-      status.className = 'status ok';
-      status.style.display = 'block';
-      status.textContent = '✓ Saved to records. Opening WhatsApp...';
-      setTimeout(() => {
-        window.open("https://wa.me/2347031379047?text=" + msg, "_blank");
-        btn.disabled = false;
-        btn.textContent = 'Submit Application & Open WhatsApp →';
-        status.textContent = '✓ Sent! Check your WhatsApp.';
-        document.getElementById('leadForm').reset();
-      }, 800);
-    };
-
-    document.body.appendChild(form);
-    form.submit();
-    // Clean up form element after submission starts
-    setTimeout(() => form.remove(), 1000);
-
-  } else {
-    // No Google Form configured — just WhatsApp
-    status.className = 'status ok';
-    status.style.display = 'block';
-    status.textContent = 'Opening WhatsApp...';
-    setTimeout(() => {
-      window.open("https://wa.me/2347031379047?text=" + msg, "_blank");
-      btn.disabled = false;
-      btn.textContent = 'Submit Application & Open WhatsApp →';
-      status.textContent = '✓ Sent! Check your WhatsApp.';
-      document.getElementById('leadForm').reset();
-    }, 500);
-  }
-}
-</script>
 </body>
 </html>
